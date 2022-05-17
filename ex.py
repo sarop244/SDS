@@ -43,9 +43,14 @@ predictor = dlib.shape_predictor(predictor_path)
 count=0
 noface=0
 while(cap.isOpened()):
+    
     ret, frame = cap.read()
-        
-    #frame = cv2.flip(frame, 1)  #sangha
+    #frame = cv2.imread("facefolder/2.jpg")
+    frame = cv2.resize(frame,dsize=(640,480))
+    frame = cv2.flip(frame,1)
+    #frame = cv2.resize(frame,dsize=(0,0), fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
+    #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    #frame =  all_files.download_to_filename("facefolder/1.jpg")#sangha
     dets = detector(frame, 0)
     
     #img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -83,7 +88,7 @@ while(cap.isOpened()):
                 #print(face_descriptors)
                 
                 img_count = os.listdir('facefolder/')
-                print(img_count)
+                #print(img_count)
                 ex2.MyFace(face_descriptors,img_count)
                 
                 
@@ -96,6 +101,7 @@ while(cap.isOpened()):
           filedown(cnt)
             
     cv2.imshow('frame', frame)
+    #cv2.imshow('frame2', frame2)
         #out.write(frame)
     
     if cv2.waitKey(1) & 0xFF == ord('q'):

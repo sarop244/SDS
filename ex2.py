@@ -34,11 +34,12 @@ def MyFace(face_d,img_count):
   for a in range(len(img_count)):
       
       img = cv2.imread("facefolder/{}.jpg".format(a))
-      
+      img = cv2.resize(img,dsize=(640,480))
+      #img = cv2.resize(img,dsize=(0,0), fx=0.3, fy=0.3, interpolation=cv2.INTER_AREA)
+      #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
       #print('emfdjdha?')
       dets=detector(img,0)
       for face in dets :
-        
         shape = predictor(img, face)
         #landmarks = np.matrix([[p.x, p.y] for p in shape.parts()])
         
@@ -46,6 +47,7 @@ def MyFace(face_d,img_count):
             #cv2.circle(img, (shape.parts()[num].x, shape.parts()[num].y), 3, (0,255,0), -1)
             
       #face_descriptors = []
+      print(a)
       face_descriptor = face_recog.compute_face_descriptor(img,shape)
                 
       
@@ -71,14 +73,16 @@ def MyFace(face_d,img_count):
         
         #for name, saved_desc in descs.items():
 
-        
-      dist = np.linalg.norm(face_d - face_descriptors, axis=1, ord=3)#유클리디안 거리계산
+      a=np.array([face_d])
+      b=np.array([face_descriptors])
+      #print(a)
+      #print(b)
+      dist = np.linalg.norm(a-b, axis=1)#유클리디안 거리계산
       print(dist)  
-      if dist >= 0.4:
+      if dist <= 0.4:
             #last_found = {'name': name, 'dist': dist, 'color': (255,255,255)}
         print('sameeeeeeeeee')
-        print()
-      if dist < 0.4:
+      if dist > 0.4:
         print('Wrong')
                     #if(count_blinking >= 1):
                         #print("등록된 사용자입니다.")
