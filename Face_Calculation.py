@@ -1,8 +1,15 @@
-import dlib
-import cv2
-import numpy as np
-import os
 import Face_Function
+
+import Doorlock_Move
+
+import cv2
+
+import dlib
+
+import numpy as np
+
+import os
+
 
 def MyFace(face_d,img_count):
     
@@ -15,9 +22,11 @@ def MyFace(face_d,img_count):
   #detector = dlib.get_frontal_face_detector()
   #predictor = dlib.shape_predictor(predictor_path)
   predictor_path=Face_Function.Face_Function.predictor_path
+  
   face_recog= Face_Function.Face_Function.face_recog
 
   detector= Face_Function.Face_Function.detector
+  
   predictor = Face_Function.Face_Function.predictor
     
 
@@ -47,7 +56,9 @@ def MyFace(face_d,img_count):
       #img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
       #print('emfdjdha?')
       dets=detector(img,0)
+      
       for face in dets :
+          
         shape = predictor(img, face)
         
 
@@ -59,6 +70,7 @@ def MyFace(face_d,img_count):
             
       #face_descriptors = []
         print(a)
+        
         face_descriptor = face_recog.compute_face_descriptor(img,shape)
                 
       
@@ -85,16 +97,24 @@ def MyFace(face_d,img_count):
         #for name, saved_desc in descs.items():
 
         a=np.array([face_d])
+        
         b=np.array([face_descriptors])
       #print(a)
       #print(b)
         dist = np.linalg.norm(a-b, axis=1)#유클리디안 거리계산
-        print(dist)  
+        
+        print(dist)
+        
         if dist <= 0.4:
             #last_found = {'name': name, 'dist': dist, 'color': (255,255,255)}
           print('sameeeeeeeeee')
+          
+          Doorlcok_Move.Doorlock()
+          
         if dist > 0.4:
+            
           print('Wrong')
+          
                     #if(count_blinking >= 1):
                         #print("등록된 사용자입니다.")
                         #face_doorlock_test.main()

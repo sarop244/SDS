@@ -1,11 +1,19 @@
-import dlib
-import numpy as np
-import cv2
 import Face_Calculation
+
 import Face_Function
-import Firebase_Token
+
+import Firebase_Main
+
+import cv2
+
+import dlib
+
 import pyrebase
+
+import numpy as np
+
 import os
+
 from math import hypot
 
 
@@ -32,14 +40,14 @@ def get_blinking(eye_points, facial_landmarks):
     return ratio
 
 
-def filedown(cnt):
+#def filedown(cnt):
     
-     all_files = storage.child().list_files()
+     #all_files = storage.child().list_files()
      
-     for file in all_files:
-      print(file)
-      file.download_to_filename("facefolder/{}.jpg".format(cnt))
-      cnt+=1
+     #for file in all_files:
+      #print(file)
+      #file.download_to_filename("facefolder/{}.jpg".format(cnt))
+      #cnt+=1
 
 #config = {  "apiKey": "AIzaSyBTGrklWDyt2cWXL3XVgV7AvJLeQXX60iQ",
     #"authDomain": "smart-doorlock-c9e00.firebaseapp.com",
@@ -53,9 +61,12 @@ def filedown(cnt):
             
 # firebase 사진 불러오기
 #Firebase_Token= Firebase_Token.Token()
-firebase = Firebase_Token.Token.firebase
-auth = Firebase_Token.Token.auth
-storage = Firebase_Token.Token.storage
+#Firebase_Token=Firebase_FaceImage.Token()
+firebase = Firebase_Main.Token.firebase
+
+auth = Firebase_Main.Token.auth
+
+storage = Firebase_Main.Token.storage
 
 #all_files = storage.child().list_files()
 
@@ -70,9 +81,11 @@ cap = cv2.VideoCapture(0)
 
 
 predictor_path=Face_Function.Face_Function.predictor_path
+
 face_recog= Face_Function.Face_Function.face_recog
 
 detector= Face_Function.Face_Function.detector
+
 predictor = Face_Function.Face_Function.predictor
 
 r_eye_points = [42, 43, 44, 45, 46, 47]
@@ -80,13 +93,17 @@ r_eye_points = [42, 43, 44, 45, 46, 47]
 l_eye_points = [36, 37, 38, 39, 40, 41]
 
 blinking_count=0
+
 count=0
+
 noface=0
+
 while(cap.isOpened()):
     
     ret, frame = cap.read()
     #frame = cv2.imread("facefolder/2.jpg")
     frame = cv2.resize(frame,dsize=(640,480))
+    
     frame = cv2.flip(frame,1)
     #frame = cv2.resize(frame,dsize=(0,0), fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
     #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -96,13 +113,18 @@ while(cap.isOpened()):
     #img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     
     count%=21  # 10번중에 한번 좌표따기
+    
     count+=1
+    
     noface%=50
+    
     noface+=1
     #landmark
     
     if dets:
+        
         for k, d in enumerate(dets):
+            
             shape = predictor(frame, d)
             
             right_eye = get_blinking(r_eye_points, shape)
@@ -112,7 +134,9 @@ while(cap.isOpened()):
             blinking = (left_eye + right_eye) / 2
             
             if(blinking>=5.0):
+                
                 blinking_count+=1
+                
             print(blinking_count)
             
             #print(dets)
@@ -126,6 +150,7 @@ while(cap.isOpened()):
             
             #create list to contain landmarks
             for num in range(shape.num_parts):
+                
                 cv2.circle(frame, (shape.parts()[num].x, shape.parts()[num].y), 3, (0,255,0), -1)
                 
                 
@@ -145,18 +170,29 @@ while(cap.isOpened()):
                 
         
     else:
-        #print(noface)
+        
         if(noface==1):
+            
           cnt=0
+          
           blinking_count=0
-          filedown(cnt)
+          
+#           all_files = storage.child().list_files()
+#           print('s')
+#           for file in all_files:
+#              print(file)
+#              file.download_to_filename("facefolder/{}.jpg".format(cnt))
+#              cnt+=1
+          Firebase_Main.Filedown(cnt)
             
     cv2.imshow('frame', frame)
     #cv2.imshow('frame2', frame2)
         #out.write(frame)
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
+        
         print("q pressed")
+        
         break
     
 cap.release()
