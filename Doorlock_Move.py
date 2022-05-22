@@ -7,25 +7,16 @@ def Doorlock():
     
     GPIO.setmode(GPIO.BCM)
     
-    GPIO.setup(26,GPIO.OUT)
+    GPIO.setup(18,GPIO.OUT)
     
     time.sleep(1)
-
-
-    for i in range(1,3):
-        
-        GPIO.output(26,True)
-        
-        print('true')
-        
-        time.sleep(1)
-        
-        GPIO.output(26,False)
-        
-        print('false')
-        
-        time.sleep(1)
-
+    
+    GPIO.output(18,False)
+    
+    print('open')
+    
+    time.sleep(3)
+    
     GPIO.cleanup()
     
     print('cleanup')

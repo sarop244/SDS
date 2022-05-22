@@ -105,13 +105,13 @@ def MyFace(face_d,img_count):
         
         print(dist)
         
-        if dist <= 0.4:
+        if dist <= 0.43:
             #last_found = {'name': name, 'dist': dist, 'color': (255,255,255)}
           print('sameeeeeeeeee')
           
-          Doorlcok_Move.Doorlock()
+          Doorlock_Move.Doorlock()
           
-        if dist > 0.4:
+        if dist > 0.43:
             
           print('Wrong')
           
