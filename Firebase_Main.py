@@ -26,7 +26,9 @@ class Token():
     auth = firebase.auth()
     
     storage = firebase.storage()
-
+    
+    db=firebase.database()
+    
 def Filedown(cnt):
     
          all_files = Token.storage.child().list_files()
@@ -35,6 +37,6 @@ def Filedown(cnt):
              
             print(file)
             
-            file.download_to_filename("facefolder/{}.jpg".format(cnt))
+            file.download_to_filename("facefolder/{}".format(file.name))
             
             cnt+=1

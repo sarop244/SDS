@@ -8,7 +8,6 @@ class Face_Function():
     
     face_recog = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
 
-
     detector = dlib.get_frontal_face_detector()
     
     predictor = dlib.shape_predictor(predictor_path)

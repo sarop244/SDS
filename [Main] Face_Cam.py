@@ -39,46 +39,23 @@ def get_blinking(eye_points, facial_landmarks):
 
     return ratio
 
-
-#def filedown(cnt):
+def DelImage():
     
-     #all_files = storage.child().list_files()
-     
-     #for file in all_files:
-      #print(file)
-      #file.download_to_filename("facefolder/{}.jpg".format(cnt))
-      #cnt+=1
-
-#config = {  "apiKey": "AIzaSyBTGrklWDyt2cWXL3XVgV7AvJLeQXX60iQ",
-    #"authDomain": "smart-doorlock-c9e00.firebaseapp.com",
-    #"databaseURL": "https://smart-doorlock-c9e00-default-rtdb.firebaseio.com",
-    #"projectId": "smart-doorlock-c9e00",
-    #"storageBucket": "smart-doorlock-c9e00.appspot.com",
-    #"messagingSenderId": "404335392148",
-    #"appId": "1:404335392148:web:75c6d6f8572fea4dbf4b81",
-    #"measurementId": "G-7TB1L2YDF4",
-    #"serviceAccount": "smart-doorlock-c9e00-firebase-adminsdk-qge67-165a3f65b6.json"}
+    if os.path.exists('facefolder/'):
+        
+        for file in os.scandir('facefolder'):
             
-# firebase 사진 불러오기
-#Firebase_Token= Firebase_Token.Token()
-#Firebase_Token=Firebase_FaceImage.Token()
+            print('Remoce file: ',file)
+            
+            os.remove(file)
+
 firebase = Firebase_Main.Token.firebase
 
 auth = Firebase_Main.Token.auth
 
 storage = Firebase_Main.Token.storage
 
-#all_files = storage.child().list_files()
-
 cap = cv2.VideoCapture(0)
-
-#predictor_path = 'shape_predictor_68_face_landmarks.dat'
-#face_recog = dlib.face_recognition_model_v1("dlib_face_recognition_resnet_model_v1.dat")
-
-
-#detector = dlib.get_frontal_face_detector()
-#predictor = dlib.shape_predictor(predictor_path)
-
 
 predictor_path=Face_Function.Face_Function.predictor_path
 
@@ -101,25 +78,20 @@ noface=0
 while(cap.isOpened()):
     
     ret, frame = cap.read()
-    #frame = cv2.imread("facefolder/2.jpg")
+   
     frame = cv2.resize(frame,dsize=(640,480))
     
     frame = cv2.flip(frame,1)
-    #frame = cv2.resize(frame,dsize=(0,0), fx=0.5, fy=0.5, interpolation=cv2.INTER_AREA)
-    #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    #frame =  all_files.download_to_filename("facefolder/1.jpg")#sangha
+    
     dets = detector(frame, 0)
     
-    #img_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-    
-    count%=21  # 10번중에 한번 좌표따기
+    count%=16  
     
     count+=1
     
-    noface%=50
+    noface%=100
     
     noface+=1
-    #landmark
     
     if dets:
         
@@ -138,36 +110,20 @@ while(cap.isOpened()):
                 blinking_count+=1
                 
             print(blinking_count)
-            
-            #print(dets)
-            #landmarks = np.matrix([[p.x, p.y] for p in shape.parts()])
-            
-                    # make prediction and transform to numpy array
 
-            #land = predictor(img_rgb, d)
-                    
-            
-            
-            #create list to contain landmarks
             for num in range(shape.num_parts):
                 
                 cv2.circle(frame, (shape.parts()[num].x, shape.parts()[num].y), 3, (0,255,0), -1)
                 
-                
-            if count==20 and blinking_count>=1 :
-                #face_descriptors = []
+            if count==15 and blinking_count>=1 :
+
                 face_descriptor = face_recog.compute_face_descriptor(frame,shape)
-                #print(frame)
                 
                 face_descriptors= np.array(face_descriptor)
-                #face_desriptor= np.array(face_descriptor)
-                #print(face_descriptors)
-                
+
                 img_count = os.listdir('facefolder/')
-                #print(img_count)
+                
                 Face_Calculation.MyFace(face_descriptors,img_count)
-                
-                
         
     else:
         
@@ -177,17 +133,11 @@ while(cap.isOpened()):
           
           blinking_count=0
           
-#           all_files = storage.child().list_files()
-#           print('s')
-#           for file in all_files:
-#              print(file)
-#              file.download_to_filename("facefolder/{}.jpg".format(cnt))
-#              cnt+=1
+          DelImage()
+          
           Firebase_Main.Filedown(cnt)
             
     cv2.imshow('frame', frame)
-    #cv2.imshow('frame2', frame2)
-        #out.write(frame)
     
     if cv2.waitKey(1) & 0xFF == ord('q'):
         
@@ -196,9 +146,6 @@ while(cap.isOpened()):
         break
     
 cap.release()
-#out.release()
-
-#cv2.destroyAllWindows()
 
 
 

@@ -9,16 +9,17 @@ def Doorlock():
     
     GPIO.setup(18,GPIO.OUT)
     
-    time.sleep(1)
+    time.sleep(0.5)
     
     GPIO.output(18,False)
     
     print('open')
     
-    time.sleep(3)
+    time.sleep(2)
     
     GPIO.cleanup()
     
     print('cleanup')
     
-    time.sleep(1)
+    time.sleep(0.5)
+Doorlock()
