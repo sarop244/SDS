@@ -1,7 +1,6 @@
-import cv2
-
 import dlib
 
+#dlib 기능(얼굴 인식 , 랜드마크 출력)
 class Face_Function():
     
     predictor_path = 'shape_predictor_68_face_landmarks.dat'
