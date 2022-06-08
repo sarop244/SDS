@@ -171,4 +171,3 @@ while(cap.isOpened()):
     
 cap.release()
 
-
