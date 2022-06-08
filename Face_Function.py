@@ -10,3 +10,6 @@ class Face_Function():
     detector = dlib.get_frontal_face_detector()
     
     predictor = dlib.shape_predictor(predictor_path)
+
+    
+    
